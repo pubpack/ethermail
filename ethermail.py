@@ -79,6 +79,7 @@ async def worker():
             ) as client:
                 response = await client.get(proxyAddress)
                 respData = await response.json()
+                print('proxy response', respData)
                 global proxy_address
                 proxy_address = respData['proxy']
 
