@@ -124,6 +124,6 @@ if __name__ == '__main__':
     ref = input('Referral code: ')
     delay = int(input('Delay(sec): '))
     threads = int(input('Threads: '))
-    proxyAddress = int(input("Proxy Address:"))
+    proxyAddress = input("Proxy Address:")
 
     asyncio.run(main())
