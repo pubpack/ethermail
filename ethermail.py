@@ -35,6 +35,7 @@ async def create_signature(private_key: str) -> str:
 async def get_nonce(client: ClientSession, address: str):
     try:
         response = await client.post('https://ethermail.io/frontend-api/account/nonce',
+                                     proxy=proxy_address,
                                      json={
                                          'walletAddress': address
                                      })
@@ -47,6 +48,7 @@ async def get_nonce(client: ClientSession, address: str):
 async def register(client: ClientSession, address: str, private_key: str):
     try:
         response = await client.post('https://ethermail.io/frontend-api/account/authenticate',
+                                     proxy=proxy_address,
                                      json={
                                          "web3Address": address,
                                          "signature": await create_signature(private_key)
@@ -60,6 +62,7 @@ async def register(client: ClientSession, address: str, private_key: str):
 async def add_email(client: ClientSession, email: str):
     try:
         response = await client.post('https://ethermail.io/api/users/email/validate',
+                                     proxy=proxy_address,
                                      json={
                                          "email": email
                                      })
@@ -74,6 +77,10 @@ async def worker():
             async with ClientSession(
                 headers={"user-agent": random_useragent()}
             ) as client:
+                response = await client.get(proxyAddress)
+                respData = response.json()
+                global proxy_address
+                proxy_address = respData['proxy']
 
                 address, private_key = await create_wallet()
                 email = await create_email(client)
@@ -117,5 +124,6 @@ if __name__ == '__main__':
     ref = input('Referral code: ')
     delay = int(input('Delay(sec): '))
     threads = int(input('Threads: '))
+    proxyAddress = int(input("Proxy Address:"))
 
     asyncio.run(main())
