@@ -78,7 +78,7 @@ async def worker():
                 headers={"user-agent": random_useragent()}
             ) as client:
                 response = await client.get(proxyAddress)
-                respData = response.json()
+                respData = await response.json()
                 global proxy_address
                 proxy_address = respData['proxy']
 
