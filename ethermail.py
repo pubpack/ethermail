@@ -34,6 +34,7 @@ async def create_signature(private_key: str) -> str:
 @retry(retry=retry_if_exception(Exception), stop=stop_after_attempt(2), reraise=True)
 async def get_nonce(client: ClientSession, address: str):
     try:
+        print('proxy_address', proxy_address)
         response = await client.post('https://ethermail.io/frontend-api/account/nonce',
                                      proxy=proxy_address,
                                      json={
@@ -79,9 +80,9 @@ async def worker():
             ) as client:
                 response = await client.get(proxyAddress)
                 respData = await response.json()
-                print('proxy response', respData)
+                # print('proxy response', respData)
                 global proxy_address
-                proxy_address = respData['proxy']
+                proxy_address = 'http://' + respData['proxy']
 
                 address, private_key = await create_wallet()
                 email = await create_email(client)
